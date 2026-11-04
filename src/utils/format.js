@@ -1,0 +1,1 @@
+export const formatRupiah = (n) => 'Rp' + new Intl.NumberFormat('id-ID').format(n)
