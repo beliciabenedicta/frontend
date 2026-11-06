@@ -1,21 +1,55 @@
-import { NavLink, Link } from 'react-router-dom'
-import { useCart } from '../context/CartContext'
+import { NavLink, useLocation } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
-  const { totalItems } = useCart()
+  const { count } = useCart();
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith("/admin");
 
   return (
-    <nav className="e-nav">
-      <Link to="/" className="e-brand">Embun</Link>
-      <div className="e-links">
-        <NavLink to="/" end>Home</NavLink>
-        <NavLink to="/keranjang">
-          Keranjang
-          {/* Conditional rendering: badge hanya muncul jika keranjang berisi */}
-          {totalItems > 0 && <span className="e-badge">{totalItems}</span>}
-        </NavLink>
-        <NavLink to="/checkout">Checkout</NavLink>
-      </div>
+    <nav className="bg-[#3b82f6] px-8 py-4 flex justify-end items-center text-white shadow-md">
+      {!isAdmin && (
+        <div className="flex items-center space-x-6">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `hover:text-blue-200 transition ${
+                isActive ? "text-white font-semibold underline underline-offset-4" : ""
+              }`
+            }
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            to="/cart"
+            className={({ isActive }) =>
+              `flex items-center gap-1 hover:text-blue-200 transition ${
+                isActive ? "text-white font-semibold underline underline-offset-4" : ""
+              }`
+            }
+          >
+            <span>Keranjang</span>
+            {count > 0 && (
+              <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full ml-1">
+                {count}
+              </span>
+            )}
+          </NavLink>
+
+          <NavLink
+            to="/checkout"
+            className={({ isActive }) =>
+              `hover:text-blue-200 transition ${
+                isActive ? "text-white font-semibold underline underline-offset-4" : ""
+              }`
+            }
+          >
+            Checkout
+          </NavLink>
+        </div>
+      )}
     </nav>
-  )
+  );
 }
